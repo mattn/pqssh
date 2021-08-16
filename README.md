@@ -17,11 +17,11 @@ import (
 
 func main() {
 	driver := &pqssh.PqSshDriver{
-		ViaHostname:   "my-server",
-		ViaPort:       22,
-		ViaUsername:   "sshuser",
-		ViaPassword:   "sshpassword",
-		ViaPrivateKey: "/home/mattn/.ssh/id_rsa",
+		Hostname:   "my-server",
+		Port:       22,
+		Username:   "sshuser",
+		Password:   "sshpassword",
+		PrivateKey: "/home/mattn/.ssh/id_rsa",
 	}
 
 	sql.Register("postgres+ssh", driver)

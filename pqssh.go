@@ -16,18 +16,18 @@ import (
 )
 
 type PqSshDriver struct {
-	ViaHostname   string
-	ViaPort       int
-	ViaUsername   string
-	ViaPassword   string
-	ViaPrivateKey string
-	client        *ssh.Client
-	agent         agent.Agent
+	Hostname   string `json:"hostname"`
+	Port       int    `json:"port"`
+	Username   string `json:"username"`
+	Password   string `json:"password"`
+	PrivateKey string `json:"privateKey"`
+	client     *ssh.Client
+	agent      agent.Agent
 }
 
 func (d *PqSshDriver) Open(s string) (driver.Conn, error) {
 	sshConfig := &ssh.ClientConfig{
-		User:            d.ViaUsername,
+		User:            d.Username,
 		Auth:            []ssh.AuthMethod{},
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 	}
@@ -37,17 +37,17 @@ func (d *PqSshDriver) Open(s string) (driver.Conn, error) {
 		sshConfig.Auth = append(sshConfig.Auth, ssh.PublicKeysCallback(agent.NewClient(conn).Signers))
 	}
 
-	if d.ViaPrivateKey != "" {
+	if d.PrivateKey != "" {
 		sshConfig.Auth = append(sshConfig.Auth, ssh.PublicKeysCallback(func() ([]ssh.Signer, error) {
-			return getSigners(d.ViaPrivateKey, d.ViaPassword)
+			return getSigners(d.PrivateKey, d.Password)
 		}))
-	} else if d.ViaPassword != "" {
+	} else if d.Password != "" {
 		sshConfig.Auth = append(sshConfig.Auth, ssh.PasswordCallback(func() (string, error) {
-			return d.ViaPassword, nil
+			return d.Password, nil
 		}))
 	}
 
-	sshcon, err := ssh.Dial("tcp", fmt.Sprintf("%s:%d", d.ViaHostname, d.ViaPort), sshConfig)
+	sshcon, err := ssh.Dial("tcp", fmt.Sprintf("%s:%d", d.Hostname, d.Port), sshConfig)
 	if err != nil {
 		return nil, err
 	}
