@@ -1,3 +1,7 @@
+// pqssh is a Go driver for PostgreSQL over SSH. This driver can connect
+// to postgres on a server via SSH using the local ssh-agent, password, or
+// private-key.
+
 package pqssh
 
 import (
@@ -13,7 +17,8 @@ import (
 	"golang.org/x/crypto/ssh/agent"
 )
 
-type PqSshDriver struct {
+// Driver is authentication provider information.
+type Driver struct {
 	Hostname   string `json:"hostname"`
 	Port       int    `json:"port"`
 	Username   string `json:"username"`
@@ -23,7 +28,8 @@ type PqSshDriver struct {
 	agent      agent.Agent
 }
 
-func (d *PqSshDriver) Open(s string) (driver.Conn, error) {
+// Open opens connection to the server.
+func (d *Driver) Open(s string) (driver.Conn, error) {
 	sshConfig := &ssh.ClientConfig{
 		User:            d.Username,
 		Auth:            []ssh.AuthMethod{},
@@ -54,11 +60,13 @@ func (d *PqSshDriver) Open(s string) (driver.Conn, error) {
 	return pq.DialOpen(d, s)
 }
 
-func (d *PqSshDriver) Dial(network, address string) (net.Conn, error) {
+// Dial make socket connection via SSH.
+func (d *Driver) Dial(network, address string) (net.Conn, error) {
 	return d.client.Dial(network, address)
 }
 
-func (d *PqSshDriver) DialTimeout(network, address string, timeout time.Duration) (net.Conn, error) {
+// DialTimeout make socket connection via SSH.
+func (d *Driver) DialTimeout(network, address string, timeout time.Duration) (net.Conn, error) {
 	return d.client.Dial(network, address)
 }
 
