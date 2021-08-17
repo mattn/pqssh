@@ -1,9 +1,7 @@
 package pqssh
 
 import (
-	"crypto/x509"
 	"database/sql/driver"
-	"encoding/pem"
 	"fmt"
 	"io/ioutil"
 	"net"
@@ -70,25 +68,17 @@ func getSigners(keyfile string, password string) ([]ssh.Signer, error) {
 		return nil, err
 	}
 
-	b, _ := pem.Decode(buf)
-	if x509.IsEncryptedPEMBlock(b) {
-		buf, err = x509.DecryptPEMBlock(b, []byte(password))
-		if err != nil {
-			return nil, err
-		}
-		pk, err := x509.ParsePKCS1PrivateKey(buf)
-		if err != nil {
-			return nil, err
-		}
-		k, err := ssh.NewSignerFromKey(pk)
+	if password != "" {
+		k, err := ssh.ParsePrivateKeyWithPassphrase(buf, []byte(password))
 		if err != nil {
 			return nil, err
 		}
 		return []ssh.Signer{k}, nil
 	}
+
 	k, err := ssh.ParsePrivateKey(buf)
-	if err == nil {
-		return []ssh.Signer{k}, nil
+	if err != nil {
+		return nil, err
 	}
-	return nil, err
+	return []ssh.Signer{k}, nil
 }
