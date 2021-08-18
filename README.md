@@ -8,6 +8,8 @@ When using databases, if the database server is in the local network, you can co
 
 However, this requires tunneling with the ssh command beforehand, and it is somewhat time-consuming to operate a remote database in batch mode.
 
+This package provide way to connect the remote postgres via ssh transport.
+
 ## Usage
 
 You should call `sql.Register` with your authentication provider information, Hostname, Port, Username, Password, PrivateKey. No need to consider that the connection is over SSH transport.
