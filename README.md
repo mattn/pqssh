@@ -2,6 +2,12 @@
 
 Go driver for PostgreSQL over SSH. This driver can connect to postgres on a server via SSH using the local ssh-agent, password, or private-key.
 
+## Why
+
+When using databases, if the database server is in the local network, you can connect directly to it, but the database server is remote and you can only connect to it via ssh. In such cases, it is necessary to use port forwarding and other methods to connect.
+
+However, this requires tunneling with the ssh command beforehand, and it is somewhat time-consuming to operate a remote database in batch mode.
+
 ## Usage
 
 ```go
