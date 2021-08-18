@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-	driver := &pqssh.PqSshDriver{
+	driver := &pqssh.Driver{
 		Hostname:   "my-server",
 		Port:       22,
 		Username:   "sshuser",
