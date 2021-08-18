@@ -87,7 +87,7 @@ func main() {
 
 	sql.Register("postgres+ssh", &cfg)
 
-    // Blah, Blah
+	// Blah, Blah
 }
 ```
 
