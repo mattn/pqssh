@@ -65,6 +65,32 @@ func main() {
 }
 ```
 
+If you don't want to hardcode your credentials, you can use this way:
+
+```go
+type config struct {
+	pqssh.Driver
+	DSN string `json:"dsn"`
+}
+
+func main() {
+	b, err := ioutil.ReadFile("config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var cfg config
+	err = json.Unmarshal(b, &cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	sql.Register("postgres+ssh", &cfg)
+
+    // Blah, Blah
+}
+```
+
 ## Requirements
 
 Go
