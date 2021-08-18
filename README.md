@@ -10,6 +10,8 @@ However, this requires tunneling with the ssh command beforehand, and it is some
 
 ## Usage
 
+You should call `sql.Register` with your authentication provider information, Hostname, Port, Username, Password, PrivateKey. No need to consider that the connection is over SSH transport.
+
 ```go
 package main
 
